@@ -23,8 +23,12 @@ if [ ! -d /opt/VRCDog ]; then
   echo "[x] 没有 /opt/VRCDog，这台不是部署机"
   exit 1
 fi
-echo "    主机: $(hostname)  出口IP: $(curl -s --max-time 8 https://ifconfig.me || echo 未知)"
+IP=$(curl -s --max-time 8 https://ifconfig.me || echo 未知)
+echo "    主机: $(hostname)  出口IP: $IP"
 echo "    仓库目录: /opt/VRCDog"
+if [ "$IP" != "47.98.243.204" ]; then
+  echo "[!] 出口 IP 不是 47.98.243.204：如果这台不是线上机，更新只会改本地，官网不会变。"
+fi
 
 echo "== 下载更新脚本"
 if ! fetch auto-update.sh "$TARGET"; then
